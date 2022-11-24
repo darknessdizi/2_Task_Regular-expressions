@@ -18,16 +18,25 @@ def save_file(new_list):
 if __name__ == '__main__':
 
     my_list = load_file()
-    # pprint(my_list)
 
     new_list = []
     for index, element in enumerate(my_list):
-        if index != 0: 
-            client_list = []
-            for i in element:
-                client_list += re.findall(r'\w+', i)
-                print(client_list) 
+        line = ','.join(element[:3])
+        full_name = re.findall(r'\w+', line)
+        while True:
+            if len(full_name) < 3:
+                full_name.append('')
+            else:
+                break
+        full_name.extend(element[3:5])
+        patern = r'(\+7|8)\s*\(*(\d+)\)*[\s-]*(\d{3})[-]*(\d{2})[-]*(\d{2})'
+        if re.search(patern, element[5]):
+            phone = re.sub(patern, r'+7(\2)\3-\4-\5', element[5])
+            patern = r'\(*(\w+)\.\s*(\d+)\)*'
+            phone = re.sub(patern, r'\1.\2', element[5])
+            full_name.append(phone)
         else:
-            new_list.append(element)
+            full_name.append(element[5])
+        print(full_name)
 
     save_file(new_list)
