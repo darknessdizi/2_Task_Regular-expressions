@@ -33,10 +33,12 @@ if __name__ == '__main__':
         if re.search(patern, element[5]):
             phone = re.sub(patern, r'+7(\2)\3-\4-\5', element[5])
             patern = r'\(*(\w+)\.\s*(\d+)\)*'
-            phone = re.sub(patern, r'\1.\2', element[5])
+            phone = re.sub(patern, r'\1.\2', phone)
             full_name.append(phone)
         else:
             full_name.append(element[5])
+        full_name.append(element[6])
+        new_list.append(full_name)
         print(full_name)
 
     save_file(new_list)
