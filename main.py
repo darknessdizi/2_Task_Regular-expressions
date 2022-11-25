@@ -10,33 +10,33 @@ def load_file():
     return contacts_list
 
 def save_file(new_list):
-    with open("phonebook.csv", "w", encoding='utf-8') as file:
+    with open("phonebook.csv", "w", encoding='utf-8', newline='') as file:
         datawriter = csv.writer(file, delimiter=',')
         datawriter.writerows(new_list)
 
 def list_union(my_list):
-    line_list = []
-    for index, element in enumerate(my_list[:-1]):
-        # print(index, element)
-        union_line = False
-        for i in my_list[index+1:]:
-            if element[0] == i[0] and element[1] == i[1]:
-                union_line = [i for i in map(set, zip(element, i))]
-                # print(union_line)
+    new_list = []
+    for index, element in enumerate(my_list):
+        append = True
+        if index == 0:
+            new_list.append(element)
+            continue
+        for y, line in enumerate(new_list):
+            if element[0] == line[0] and element[1] == line[1]:
+                union_line = [line for line in map(set, zip(element, line))]
                 for i, my_set in enumerate(union_line):
                     if len(my_set)>1:
                         my_set.discard('')
                     union_line[i] = ''.join(list(my_set))
-                # print('zip', union_line)
-        else:
-            if union_line:
-                line_list.append(union_line)
-            else:
-                line_list.append(element)
-                # print(i[0], 'no')
-    pprint(line_list)
-                
+                new_list.pop(y)
+                new_list.insert(y, union_line)
+                append = False
+        if append:
+            new_list.append(element)
+    return new_list   
 
+def search_for_templates():
+    pass             
 
 
 if __name__ == '__main__':
@@ -64,7 +64,6 @@ if __name__ == '__main__':
         client_list.append(element[6])
         new_list.append(client_list)
 
-    # pprint(new_list)
-    list_union(new_list)
+    new_list = list_union(new_list)
 
-    # save_file(new_list)
+    save_file(new_list)
