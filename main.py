@@ -1,4 +1,3 @@
-from pprint import pprint
 import csv
 import re
 
@@ -15,6 +14,9 @@ def save_file(new_list):
         datawriter.writerows(new_list)
 
 def list_union(my_list):
+
+    '''Объединяет строки в списке с дублирующимися записями'''
+
     new_list = []
     for index, element in enumerate(my_list):
         append = True
@@ -25,7 +27,7 @@ def list_union(my_list):
             if element[0] == line[0] and element[1] == line[1]:
                 union_line = [line for line in map(set, zip(element, line))]
                 for i, my_set in enumerate(union_line):
-                    if len(my_set)>1:
+                    if len(my_set) > 1:
                         my_set.discard('')
                     union_line[i] = ''.join(list(my_set))
                 new_list.pop(y)
@@ -35,13 +37,9 @@ def list_union(my_list):
             new_list.append(element)
     return new_list   
 
-def search_for_templates():
-    pass             
+def search_for_templates(file_list):
 
-
-if __name__ == '__main__':
-
-    file_list = load_file()
+    '''Формирует список записей на человека согласно шаблонов'''
 
     new_list = []
     for element in file_list:
@@ -62,8 +60,13 @@ if __name__ == '__main__':
         else:
             client_list.append(element[5])
         client_list.append(element[6])
-        new_list.append(client_list)
+        new_list.append(client_list) 
+    return new_list          
 
+
+if __name__ == '__main__':
+
+    file_list = load_file()
+    new_list = search_for_templates(file_list)
     new_list = list_union(new_list)
-
     save_file(new_list)
